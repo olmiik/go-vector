@@ -18,7 +18,7 @@ func main() {
   v1 := vector.New(4)
   v2 := vector.NewWithValues([]float64{0.0, 1.0, 2.0, 3.0})
 
-  result := vector.Add(v1, v2)
+  result := v1.Add(v2)
 }
 ```
 
@@ -38,11 +38,8 @@ func main() {
 
     v1 := vector.NewWithValues([]float64{0.0, 1.0, 2.0})
     v2 := vector.NewWithValues([]float64{2.0, -1.0, 4.0})
-    cross, _ := vector.Cross(v1, v2)
-    dot, _ := vector.Dot(v1, v2)
-
-In general, all functions under `vector` package are designed to always return a new result without modifying the vectors
-in the arguments, while functions under the `vector.Vector` type will modify the vector.
+    cross, _ := v1.Cross(v2)
+    dot, _ := v1.Dot(v2)
 
 #### And more!
 

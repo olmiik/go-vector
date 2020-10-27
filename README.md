@@ -22,8 +22,6 @@ func main() {
 }
 ```
 
-#### [Full API Documentation](https://godoc.org/github.com/atedja/go-vector)
-
 ### Basic Usage
 
 #### Creating Vectors

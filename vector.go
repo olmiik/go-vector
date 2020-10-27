@@ -161,7 +161,7 @@ func Unit(v Vector) Vector {
 // have the same dimensionality.
 func (v Vector) Hadamard(other Vector) (Vector, error) {
 	if len(v) != len(other) {
-		return nil, ErrVectorInvalidDimension
+		return nil, ErrVectorNotSameSize
 	}
 
 	l := len(v)

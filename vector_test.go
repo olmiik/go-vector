@@ -46,7 +46,7 @@ func TestAdd(t *testing.T) {
 	assert := assert.New(t)
 	v1 := NewWithValues([]float64{0.0, 1.0, 2.0, 1.0})
 	v2 := NewWithValues([]float64{0.0, 1.0, 2.0, 1.0})
-	result := Add(v1, v2)
+	result := v1.Add(v2)
 	assert.Equal(result[0], 0.0)
 	assert.Equal(result[1], 2.0)
 	assert.Equal(result[2], 4.0)
@@ -56,11 +56,11 @@ func TestAdd(t *testing.T) {
 	assert.Equal(v2[1], 1.0)
 }
 
-func TestSubtract(t *testing.T) {
+func TestSub(t *testing.T) {
 	assert := assert.New(t)
 	v1 := NewWithValues([]float64{0.0, 1.0, 2.0, 1.0})
 	v2 := NewWithValues([]float64{0.0, 1.0, 2.0, 1.0})
-	result := Subtract(v1, v2)
+	result := v1.Sub(v2)
 	assert.Equal(result[0], 0.0)
 	assert.Equal(result[1], 0.0)
 	assert.Equal(result[2], 0.0)
@@ -74,7 +74,7 @@ func TestDot(t *testing.T) {
 	assert := assert.New(t)
 	v1 := NewWithValues([]float64{0.0, 1.0, 2.0, 1.0})
 	v2 := NewWithValues([]float64{0.0, 1.0, 2.0, 1.0})
-	result, err := Dot(v1, v2)
+	result, err := v1.Dot(v2)
 	assert.Nil(err)
 	assert.Equal(6.0, result)
 }
@@ -83,7 +83,7 @@ func TestCross(t *testing.T) {
 	assert := assert.New(t)
 	v1 := NewWithValues([]float64{0.0, 1.0, 2.0})
 	v2 := NewWithValues([]float64{0.0, 3.0, 4.0})
-	result, err := Cross(v1, v2)
+	result, err := v1.Cross(v2)
 	assert.Nil(err)
 	assert.Equal(-2.0, result[0])
 	assert.Equal(0.0, result[1])
@@ -94,7 +94,7 @@ func TestCross(t *testing.T) {
 
 	v3 := NewWithValues([]float64{0.0, 1.0, 2.0, 1.0})
 	v4 := NewWithValues([]float64{0.0, 1.0, 2.0})
-	_, err = Cross(v3, v4)
+	_, err = v3.Cross(v4)
 	assert.NotNil(err)
 }
 
@@ -111,7 +111,7 @@ func TestHadamard(t *testing.T) {
 	assert := assert.New(t)
 	v1 := NewWithValues([]float64{1.0, 1.0, 2.0})
 	v2 := NewWithValues([]float64{0.5, 3.0, 4.0})
-	result, err := Hadamard(v1, v2)
+	result, err := v1.Hadamard(v2)
 	assert.Nil(err)
 	assert.Equal(0.5, result[0])
 	assert.Equal(3.0, result[1])

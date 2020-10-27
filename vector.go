@@ -29,12 +29,16 @@ func min(a, b int) int {
 	return b
 }
 
+// Vector represents mathematical vector.
 type Vector []float64
 
+// New returns vector of specified szie.
 func New(size int) Vector {
 	return make(Vector, size)
 }
 
+// NewWithValues returns vector with specified values.
+// The size of new vector is equal to one of array.
 func NewWithValues(values []float64) Vector {
 	v := make(Vector, len(values))
 	copy(v, values)
@@ -42,124 +46,129 @@ func NewWithValues(values []float64) Vector {
 }
 
 // Clone this vector, returning a new Vector.
-func (self Vector) Clone() Vector {
-	return NewWithValues(self)
+func (v Vector) Clone() Vector {
+	return NewWithValues(v)
 }
 
-// Sets the values of this vector.
-func (self Vector) Set(values []float64) {
-	copy(self, values)
+// Set sets the values of this vector.
+func (v Vector) Set(values []float64) {
+	copy(v, values)
 }
 
 // Scale this vector (performs scalar multiplication) by the specified value.
-func (self Vector) Scale(value float64) {
-	length := len(self)
-	for i := 0; i < length; i++ {
-		self[i] *= value
+func (v Vector) Scale(value float64) {
+	l := len(v)
+	for i := 0; i < l; i++ {
+		v[i] *= value
 	}
 }
 
-// Returns the magnitude of this vector.
-func (self Vector) Magnitude() float64 {
+// Magnitude returns the magnitude of this vector.
+func (v Vector) Magnitude() float64 {
 	result := 0.0
-	for _, e := range self {
+	for _, e := range v {
 		result += e * e
 	}
 	return math.Sqrt(result)
 }
 
-// Zeroes this vector
-func (self Vector) Zero() {
-	for i, _ := range self {
-		self[i] = 0.0
+// Zero sets all values to zero.
+func (v Vector) Zero() {
+	for i := range v {
+		v[i] = 0.0
 	}
 }
 
-// Iterates through the elements of this vector and for each element invokes
-// the function.
-func (self Vector) Do(applyFn func(float64) float64) {
-	for i, e := range self {
-		self[i] = applyFn(e)
+// Do iterates over the elements and invokes sepcified function.
+func (v Vector) Do(applyFn func(float64) float64) {
+	for i, e := range v {
+		v[i] = applyFn(e)
 	}
 }
 
-// Iterates through the elements of this vector and for each element invokes
-// the function with index.
-func (self Vector) DoWithIndex(applyFn func(int, float64) float64) {
-	for i, e := range self {
-		self[i] = applyFn(i, e)
+// DoWithIndex iterates over the elements and invokes sepcified function.
+func (v Vector) DoWithIndex(applyFn func(int, float64) float64) {
+	for i, e := range v {
+		v[i] = applyFn(i, e)
 	}
 }
 
-// Sums of two vectors, returns the resulting vector.
-func Add(v1, v2 Vector) Vector {
-	length := min(len(v1), len(v2))
-	result := make(Vector, length)
-	for i := 0; i < length; i++ {
-		result[i] = v1[i] + v2[i]
+// Add adds another vector and returns resutl as new vector.
+func (v Vector) Add(other Vector) Vector {
+	l := min(len(v), len(other))
+	result := make(Vector, l)
+	for i := 0; i < l; i++ {
+		result[i] = v[i] + other[i]
 	}
 	return result
 }
 
-// Difference of two vectors, returns the resulting vector.
-func Subtract(v1, v2 Vector) Vector {
-	length := min(len(v1), len(v2))
-	result := make(Vector, length)
-	for i := 0; i < length; i++ {
-		result[i] = v1[i] - v2[i]
+// Sub substracts another vector and returns result as new vector.
+func (v Vector) Sub(other Vector) Vector {
+	l := min(len(v), len(other))
+	result := make(Vector, l)
+	for i := 0; i < l; i++ {
+		result[i] = v[i] - other[i]
 	}
 	return result
 }
 
-// Dot products of two vectors.
-func Dot(v1, v2 Vector) (float64, error) {
-	if len(v1) != len(v2) {
+// Dot computes dot product with another vector.
+// Another vector must have the same dimensionality.
+func (v Vector) Dot(other Vector) (float64, error) {
+	if len(v) != len(other) {
 		return 0.0, ErrVectorNotSameSize
 	}
 
-	length := len(v1)
+	l := len(v)
 	result := 0.0
-	for i := 0; i < length; i++ {
-		result += v1[i] * v2[i]
+	for i := 0; i < l; i++ {
+		result += v[i] * other[i]
 	}
 
 	return result, nil
 }
 
-// Cross products of two vectors.
-// Vector dimensionality has to be 3.
-func Cross(v1, v2 Vector) (Vector, error) {
+// Cross computes cross-product with another vector.
+// Vector dimensionality msut be equal to 3
+func (v Vector) Cross(other Vector) (Vector, error) {
 	// Early error check to prevent redundant cloning
-	if len(v1) != 3 || len(v2) != 3 {
+	if len(v) != 3 || len(other) != 3 {
 		return nil, ErrVectorInvalidDimension
 	}
 
 	result := make(Vector, 3)
-	result[0] = v1[1]*v2[2] - v1[2]*v2[1]
-	result[1] = v1[2]*v2[0] - v1[0]*v2[2]
-	result[2] = v1[0]*v2[1] - v1[1]*v2[0]
+	result[0] = v[1]*other[2] - v[2]*other[1]
+	result[1] = v[2]*other[0] - v[0]*other[2]
+	result[2] = v[0]*other[1] - v[1]*other[0]
 
 	return result, nil
 }
 
+// Unit computes unit vector result as new vector.
 func Unit(v Vector) Vector {
 	magRec := 1.0 / v.Magnitude()
 	unit := v.Clone()
-	for i, _ := range unit {
+	for i := range unit {
 		unit[i] *= magRec
 	}
+
 	return unit
 }
 
-func Hadamard(v1, v2 Vector) (Vector, error) {
-	if len(v1) != len(v2) {
+// Hadamard computes Hadamard product with another vector
+// and returns result as new vector. Another vector must
+// have the same dimensionality.
+func (v Vector) Hadamard(other Vector) (Vector, error) {
+	if len(v) != len(other) {
 		return nil, ErrVectorInvalidDimension
 	}
 
-	length := len(v1)
-	result := make(Vector, length)
-	for i := 0; i < length; i++ {
-		result[i] = v1[i] * v2[i]
+	l := len(v)
+	result := make(Vector, l)
+	for i := 0; i < l; i++ {
+		result[i] = v[i] * other[i]
 	}
+
 	return result, nil
 }

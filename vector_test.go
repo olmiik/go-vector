@@ -17,10 +17,13 @@ limitations under the License.
 package vector
 
 import (
+	"math"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
 )
+
+var epsilon = math.Nextafter(1, 2) - 1
 
 func TestNew(t *testing.T) {
 	assert := assert.New(t)
@@ -102,8 +105,8 @@ func TestUnit(t *testing.T) {
 	assert := assert.New(t)
 	v := NewWithValues([]float64{3.0, 4.0})
 	unit := Unit(v)
-	assert.InEpsilon(0.6, unit[0], EPSILON)
-	assert.InEpsilon(0.8, unit[1], EPSILON)
+	assert.InEpsilon(0.6, unit[0], epsilon)
+	assert.InEpsilon(0.8, unit[1], epsilon)
 	assert.Equal(1.0, unit.Magnitude())
 }
 

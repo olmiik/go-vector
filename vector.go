@@ -20,8 +20,6 @@ import (
 	"math"
 )
 
-var EPSILON = math.Nextafter(1, 2) - 1
-
 func min(a, b int) int {
 	if a < b {
 		return a

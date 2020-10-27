@@ -94,23 +94,35 @@ func (v Vector) DoWithIndex(applyFn func(int, float64) float64) {
 }
 
 // Add adds another vector and returns resutl as new vector.
-func (v Vector) Add(other Vector) Vector {
+// Another vector must have the same dimensionality.
+func (v Vector) Add(other Vector) (Vector, error) {
+	if len(v) != len(other) {
+		return nil, ErrVectorNotSameSize
+	}
+
 	l := min(len(v), len(other))
 	result := make(Vector, l)
 	for i := 0; i < l; i++ {
 		result[i] = v[i] + other[i]
 	}
-	return result
+
+	return result, nil
 }
 
 // Sub substracts another vector and returns result as new vector.
-func (v Vector) Sub(other Vector) Vector {
+// Another vector must have the same dimensionality.
+func (v Vector) Sub(other Vector) (Vector, error) {
+	if len(v) != len(other) {
+		return nil, ErrVectorNotSameSize
+	}
+
 	l := min(len(v), len(other))
 	result := make(Vector, l)
 	for i := 0; i < l; i++ {
 		result[i] = v[i] - other[i]
 	}
-	return result
+
+	return result, nil
 }
 
 // Dot computes dot product with another vector.
